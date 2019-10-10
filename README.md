@@ -1,22 +1,23 @@
-Database will execute script (src/main/resources/schema.sql) to create table and will populate data using data.sql script (src/main/resources/data.sql).
+In order to run the application, first, we need to do a maven build. Since we are using postgres database in docker container
+we need to do maven build with skip tests flag. Otherwise, build will fail and will not create .jar file.
+to build the .jar file do:
+mvn clean install -DskipTests=true
 
-In order to have h2 console working, create directories where database will be saved
-For Windows, use absolute path - check application.properties file:
-example of the path and database: C:/opt/demo_h2_db/testdb
-In order to be able to open console in browser, type: http://localhost:8081/h2 (if application uses different port use it instead 8081)
+Result of the command will be .jar file of our web application located inside /target directory.
+To be able to run application, execute docker composer:
+docker-compose up
 
-1.1 To build docker container from Dockerfile, type:
+Docker composer file have three services, our spring boot web app, postgres database and pgadmin - GUI for postgres.
 
-# docker build -t rest-demo-app .
+In order to be able to connect to postgres with pgAdmin, open browser and go to:
+http://localhost:5050
 
-To list all docker images, type:
+Create server with arbitrary name, and on the connection tab, for address, use docker container name (postgres),
+mybd for database name and user and password from the application.properties file.
 
-# docker images
+What is going on inside the app? When the application is started, application will look inside changelog-master.xml
+and will execute all files from master file. First one will create book table inside postgres with 3 columns (id, title and author). Second script will populate this table with test data which is located resources/data/books.csv file.
 
-To run docker container:
+Every other migration which will change the database should be added to changelog-master.xml file. Files from the list will be executed sequentially. Every change to the existing database should be made this way.
 
-# docker run -p 8081:8081 rest-demo-app
-
-1.2 To build and start docker container from docker-compose file, type:
-
-# docker-compose up
+In order to test application, open the browser and go to http://localhost:8081/books.
