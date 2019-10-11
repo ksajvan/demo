@@ -28,4 +28,9 @@ public class BookServiceImpl implements BookService {
     public Book getBookById(Long id) {
         return new Book();
     }
+
+    @Override
+    public Book save(Book book) {
+        return this.bookRepository.save(book);
+    }
 }

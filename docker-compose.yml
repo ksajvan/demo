@@ -20,7 +20,7 @@ services:
     logging:
       driver: "none"
   rest-demo-app:
-    build: .
     container_name: rest-demo-app
+    build: .
     ports:
       - "8081:8081"
