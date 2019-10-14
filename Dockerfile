@@ -29,3 +29,4 @@ COPY --from=maven /app/demo-0.0.1-SNAPSHOT.jar ./demo-0.0.1-SNAPSHOT.jar
 
 # set the startup command to run the binary
 CMD ["java", "-jar", "/app/demo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT java -Xdebug -Xrunjdwp:transport=dt_socket,address=8081,server=y,suspend=y -jar /app/demo-0.0.1-SNAPSHOT.jar
